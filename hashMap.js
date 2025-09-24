@@ -17,10 +17,33 @@
  //not tested
 function set(key,value) {
   const hashKey = hash(key)
-  const pair = {key, value}
-  buckets[hashKey] = pair
+   const pair = {key, value, hashKey}
+   if (hashKey < 0 || hashKey>= buckets.length) {
+  throw new Error("Trying to access index out of bounds");
+}
+
+  if(buckets[hashKey] != undefined) {
+    if(buckets[hashKey].key === key){
+      console.group(buckets[hashKey])
+      buckets[hashKey].value = value
+    } else {
+      const newList = linkedList();
+      newList.append(buckets[hashKey])
+      newList.append(pair);
+     
+      buckets[hashKey] = newList
+
+     console.log(hashKey)
+      console.log(newList.at(0))
+      console.log(newList.at(1))
+
+    }
+  } else {
  
+  buckets[hashKey] = pair
+  
   return pair
+  }
 }
 
 
@@ -30,7 +53,7 @@ function set(key,value) {
 
 
 
-   
+
 
 
  return {hash, set, buckets}
@@ -123,7 +146,7 @@ const linkedList = () => {
       current = current.next;
       if (current.index === index) {
         // const atNode = current;
-        return current;
+        return current.value;
       }
     }
   };
@@ -239,7 +262,7 @@ const node = (value = null, next = null) => {
 // // console.log(test.hash("Braithwaite"));
 //  test.hash("Williams"));
 
-  test.set('apple', 'red')
+ test.set('apple', 'red')
 test.set('banana', 'yellow')
 test.set('carrot', 'orange')
 test.set('dog', 'brown')
@@ -252,5 +275,9 @@ test.set('dog', 'brown')
  test.set('jacket', 'blue')
  test.set('kite', 'pink')
  test.set('lion', 'golden')
+//  test.set('elephant', 'huge')
 
+ console.log('----------BUCKETS----------------')
  console.log(test.buckets)
+
+

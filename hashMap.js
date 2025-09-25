@@ -48,43 +48,22 @@ function set(key,value) {
 
 
 function get(key) {
-  // for (const [key, value] of Object.entries(buckets)){
-  //   console.log(`key: ${key}, value: ${value}`)
-  // }
+  let foundValue = null
+  
+  buckets.forEach(bucket =>{
+    if(typeof(bucket === 'object')){
+   if(bucket.key === key){   
+      foundValue = bucket.value
+    } 
+  
 
-
- buckets.forEach(bucket => {
-    const bucketIndex = bucket.hashKey;
-    const bucketValue = bucket.value;
-    const bucketKey = bucket.key;
-    // console.log(bucketIndex, bucketKey, bucketValue)
-    console.log(bucketKey)
-
-    console.log(key)
-    console.log(`typeofs: ${typeof(key)}, ${typeof(bucketKey)}`)
-    
-    bucket.find(bucketKey===key)
-    
-    if(bucketKey === key){
-      console.log("found! "+bucketKey);
-    } else {
-      return bucketKey+", "+bucketValue+", "+bucketIndex
-    }
-    // console.log(`${bucket.hashKey},${bucket.key}, ${bucket.value}`)})
-
-
-  //  bucketValues.find(key);
-
+  }
 })
 
+return foundValue
 
 }
-  // buckets.forEach(bucket => console.log(`Keys: ${Object.keys(bucket)}`))
-  // buckets.forEach(bucket => console.log(`Values: ${Object.values(bucket)}`))
-
-
-// return buckets.find(bucket => 
-//   bucket.value.key === key)
+ 
 
 
 
@@ -321,5 +300,7 @@ test.set('dog', 'brown')
 
  console.log('------------KEYS---------------')
  console.log(test.get('apple'))
+ console.log(test.get('hat'))
+ console.log(test.buckets)
 
 

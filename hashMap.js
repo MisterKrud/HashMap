@@ -14,7 +14,7 @@
  }
 
 
- //not tested
+
 function set(key,value) {
   const hashKey = hash(key)
    const pair = {key, value, hashKey}
@@ -47,6 +47,44 @@ function set(key,value) {
 }
 
 
+function get(key) {
+  // for (const [key, value] of Object.entries(buckets)){
+  //   console.log(`key: ${key}, value: ${value}`)
+  // }
+
+
+ buckets.forEach(bucket => {
+    const bucketIndex = bucket.hashKey;
+    const bucketValue = bucket.value;
+    const bucketKey = bucket.key;
+    // console.log(bucketIndex, bucketKey, bucketValue)
+    console.log(bucketKey)
+
+    console.log(key)
+    console.log(`typeofs: ${typeof(key)}, ${typeof(bucketKey)}`)
+    
+    bucket.find(bucketKey===key)
+    
+    if(bucketKey === key){
+      console.log("found! "+bucketKey);
+    } else {
+      return bucketKey+", "+bucketValue+", "+bucketIndex
+    }
+    // console.log(`${bucket.hashKey},${bucket.key}, ${bucket.value}`)})
+
+
+  //  bucketValues.find(key);
+
+})
+
+
+}
+  // buckets.forEach(bucket => console.log(`Keys: ${Object.keys(bucket)}`))
+  // buckets.forEach(bucket => console.log(`Values: ${Object.values(bucket)}`))
+
+
+// return buckets.find(bucket => 
+//   bucket.value.key === key)
 
 
 
@@ -56,7 +94,8 @@ function set(key,value) {
 
 
 
- return {hash, set, buckets}
+
+ return {hash, set, buckets, get}
  }
  
  
@@ -277,7 +316,10 @@ test.set('dog', 'brown')
  test.set('lion', 'golden')
 //  test.set('elephant', 'huge')
 
- console.log('----------BUCKETS----------------')
- console.log(test.buckets)
+//  console.log('----------BUCKETS----------------')
+//  console.log(test.buckets)
+
+ console.log('------------KEYS---------------')
+ console.log(test.get('apple'))
 
 

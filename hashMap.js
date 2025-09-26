@@ -1,7 +1,7 @@
 function hashMap(loadFactory, capacity) {
   let buckets = [];
   buckets.length = 16;
-
+let l=0
 
   function hash(key) {
     let hashCode = 0;
@@ -37,9 +37,10 @@ function hashMap(loadFactory, capacity) {
         console.log(newList.at(0));
         console.log(newList.at(1));
       }
+      l++
     } else {
       buckets[hashKey] = pair;
-
+      l++
       return pair;
     }
   }
@@ -49,7 +50,7 @@ function hashMap(loadFactory, capacity) {
     let foundValue = null;
 
     buckets.forEach((bucket) => {
-      if (typeof (bucket === "object")) {
+      // if (typeof (bucket === "object")) {
         if (bucket.hashKey === undefined) {
           let n = bucket.size() - 1;
           for (let i = 0; i < n; i++) {
@@ -61,7 +62,7 @@ function hashMap(loadFactory, capacity) {
         if (bucket.key === key) {
           foundValue = bucket.value;
         }
-      }
+      // }
     });
 
     return foundValue;
@@ -72,30 +73,21 @@ function hashMap(loadFactory, capacity) {
     let removedItem = false;
       let matchIndex =false
     buckets.forEach((bucket) => {
-      if (typeof (bucket === "object")) {
+      // if (typeof (bucket === "object")) {
 
       if (bucket.hashKey === undefined) {
           let n = bucket.size() - 1;
           
           for (let i = 0; i < n; i++) {
             const bucketObject = bucket.at(i);
-            // console.log(`bucket object`)
-            // console.log(bucketObject)
-            if(bucketObject.key === key){
-              console.log('They Match')
-              matchIndex = i
-
-          }
-
-        }
-       
-          bucket.remove(matchIndex)
           
-          removedItem = true
-
-         
-        
-        
+            if(bucketObject.key === key){
+              // console.log('They Match')
+              matchIndex = i
+          }
+        }       
+          bucket.remove(matchIndex)          
+          removedItem = true     
       }
       
 
@@ -103,19 +95,38 @@ function hashMap(loadFactory, capacity) {
         buckets.splice(bucket.hashKey, bucket.hashKey + 1);
         removedItem = true;
       }
-    }
+    // }
     });
-
+l--
     return removedItem;
   }
 
-  function length() {
-    let l=0
-    buckets.forEach(bucket => bucket)
-  }
+
+  // function length() {
+  //   let l=0
+  //    buckets.forEach((bucket) => {    
+
+  //     if (bucket.hashKey === undefined) {
+  //         let n = bucket.size() - 2;
+  //         l = l+n            
+  //     }
+  //     l++
+   
+  //   });
+  //   return l
+  // }
+
+const length = () => l
+
+const clear = () => {
+  buckets.splice(0)
+  
+
+  l=0
+}
 
 
-  return { hash, set, buckets, get, remove };
+  return { hash, set, buckets, get, remove, length, clear};
 }
 
 const linkedList = () => {
@@ -302,20 +313,30 @@ test.set("lion", "golden");
 
 //  console.log('----------BUCKETS----------------')
 //  console.log(test.buckets)
-
-console.log(`------------APPLE------------`);
-console.log(test.get("apple"));
-console.log(`-------------HAT-----------`);
-console.log(test.get("hat"));
-console.log(`-----------NOT IN LIST------------`);
-console.log(test.get("random"));
-console.log(test.remove("kite"));
-console.log(`Remove dog`)
-console.log(test.remove("dog"))
-console.log(`get dog`)
-console.log(test.get("dog"))
-console.log(`remove lion`);
-console.log(test.remove('lion'))
+console.log(`Length: ${test.length()}`)
+console.log('----------BUCKETS----------------')
 console.log(test.buckets);
+
+
+console.log(`Get apple: ${test.get("apple")}`);
+
+console.log(`get hat: ${test.get("hat")}`);
+
+console.log(`get 'random (not in list) ${test.get("random")}`);
+console.log(`removing 'kite: ${test.remove("kite")}`);
+
+console.log(`Removing dog: ${test.remove("dog")}`)
+
+console.log(`Get dog: ${test.get("dog")}`)
+
+console.log(`Removing Lion: ${test.remove('lion')}`)
+console.log('----------BUCKETS----------------')
+console.log(test.buckets);
+console.log(`Length: ${test.length()}`)
+
+console.log(`Clearing: ${test.clear()}`)
+console.log('----------BUCKETS----------------')
+console.log(`buckets: ${test.buckets}`);
+console.log(`Length: ${test.length()}`)
 
 // console.log(test.remove("kite"));

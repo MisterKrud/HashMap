@@ -1,7 +1,7 @@
-function hashMap(loadFactory, capacity) {
+  function hashMap(loadFactor, capacity) {
   let buckets = [];
   buckets.length = 16;
-let l=0
+  let l=0
 
   function hash(key) {
     let hashCode = 0;
@@ -102,31 +102,86 @@ l--
   }
 
 
-  // function length() {
-  //   let l=0
-  //    buckets.forEach((bucket) => {    
+  const length = () => {
+   let keysLength =[]
+    buckets.forEach((bucket) => {
+    
+        if (bucket.hashKey === undefined) {
+          let n = bucket.size() - 1;
+          for (let i = 0; i < n; i++) {
+            const bucketObject = bucket.at(i);
+          
+           keysLength.push(bucketObject.key)
+          }
+        }
+        if(bucket.key != undefined){
+        keysLength.push(bucket.key)
+        }
+        })  
+        return keysLength.length
+  }
 
-  //     if (bucket.hashKey === undefined) {
-  //         let n = bucket.size() - 2;
-  //         l = l+n            
-  //     }
-  //     l++
-   
-  //   });
-  //   return l
-  // }
 
-const length = () => l
-
-const clear = () => {
+  const clear = () => {
   buckets.splice(0)
-  
-
   l=0
-}
+  }
+
+  const keys = () => {
+    const keysArray = []
+    buckets.forEach((bucket) => {
+    
+        if (bucket.hashKey === undefined) {
+          let n = bucket.size() - 1;
+          for (let i = 0; i < n; i++) {
+            const bucketObject = bucket.at(i);
+          
+           keysArray.push(bucketObject.key)
+          }
+        }
+        if(bucket.key != undefined){
+        keysArray.push(bucket.key)
+        }
+        })  
+        return keysArray
+  }
+
+    const values = () => {
+    const valuesArray = []
+    buckets.forEach((bucket) => {
+    
+        if (bucket.hashKey === undefined) {
+          let n = bucket.size() - 1;
+          for (let i = 0; i < n; i++) {
+            const bucketObject = bucket.at(i);
+          
+           valuesArray.push(bucketObject.value)
+          }
+        }
+        if(bucket.value != undefined){
+        valuesArray.push(bucket.value)
+        }
+        })  
+        return valuesArray
+  }
 
 
-  return { hash, set, buckets, get, remove, length, clear};
+  const entries = () =>{
+    const entriesArray = []
+    const getKeys = keys();
+    const getValues = values();
+    const ln = length();
+    for (let n = 0; n<ln; n++){
+      const arr = [];
+      arr.push(getKeys[n], getValues[n]);
+      entriesArray.push(arr)
+    }
+
+    return entriesArray
+  }
+
+
+  return { hash, set, buckets, get, remove, length, clear, keys, values, entries};
 }
 
 const linkedList = () => {
@@ -290,11 +345,7 @@ const node = (value = null, next = null) => {
 
 const test = hashMap();
 
-//  test.hash("Allyn"));
-//  test.hash("Smith"));
-//  test.hash("Lenore"));
-// // console.log(test.hash("Braithwaite"));
-//  test.hash("Williams"));
+
 
 test.set("apple", "red");
 test.set("banana", "yellow");
@@ -309,13 +360,14 @@ test.set("ice cream", "white");
 test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
-//  test.set('elephant', 'huge')
 
-//  console.log('----------BUCKETS----------------')
-//  console.log(test.buckets)
 console.log(`Length: ${test.length()}`)
-console.log('----------BUCKETS----------------')
-console.log(test.buckets);
+console.log('----------keys then values----------------')
+console.log(test.keys());
+console.log(test.values());
+
+console.log('----------ENTRIES----------------')
+console.log(test.entries());
 
 
 console.log(`Get apple: ${test.get("apple")}`);
@@ -330,8 +382,9 @@ console.log(`Removing dog: ${test.remove("dog")}`)
 console.log(`Get dog: ${test.get("dog")}`)
 
 console.log(`Removing Lion: ${test.remove('lion')}`)
-console.log('----------BUCKETS----------------')
-console.log(test.buckets);
+console.log('----------keys then values----------------')
+console.log(test.keys());
+console.log(test.values());
 console.log(`Length: ${test.length()}`)
 
 console.log(`Clearing: ${test.clear()}`)

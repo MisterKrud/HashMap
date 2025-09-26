@@ -1,104 +1,122 @@
- function hashMap(loadFactory, capacity){
-  let buckets = []
-  buckets.length = 16
- 
- function hash(key) {
-   let hashCode = 0;
-      
-   const primeNumber = 31;
-   for (let i = 0; i < key.length; i++) {
-     hashCode = (primeNumber * hashCode + key.charCodeAt(i))%16;
-   }
-
-   return hashCode;
- }
+function hashMap(loadFactory, capacity) {
+  let buckets = [];
+  buckets.length = 16;
 
 
+  function hash(key) {
+    let hashCode = 0;
 
-function set(key,value) {
-  const hashKey = hash(key)
-   const pair = {key, value, hashKey}
-   if (hashKey < 0 || hashKey>= buckets.length) {
-  throw new Error("Trying to access index out of bounds");
-}
-
-  if(buckets[hashKey] != undefined) {
-    if(buckets[hashKey].key === key){
-      console.group(buckets[hashKey])
-      buckets[hashKey].value = value
-    } else {
-      const newList = linkedList();
-      newList.append(buckets[hashKey])
-      newList.append(pair);
-     
-      buckets[hashKey] = newList
-
-     console.log(hashKey)
-      console.log(newList.at(0))
-      console.log(newList.at(1))
-
+    const primeNumber = 31;
+    for (let i = 0; i < key.length; i++) {
+      hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % 16;
     }
-  } else {
- 
-  buckets[hashKey] = pair
-  
-  return pair
+
+    return hashCode;
   }
-}
 
 
-function get(key) {
-  let foundValue = null
-  
-  buckets.forEach(bucket =>{
-    
-    if(typeof(bucket === 'object')){
-    
-     if(bucket.hashKey===undefined){
-       let n= bucket.size()-1
-     for(let i =0; i<n; i++){
-      const bucketObject = bucket.at(i)
-    bucketObject.key === key ? foundValue = bucketObject.value  : null
-     }
-    
-    
+  function set(key, value) {
+    const hashKey = hash(key);
+    const pair = { key, value, hashKey };
+    if (hashKey < 0 || hashKey >= buckets.length) {
+      throw new Error("Trying to access index out of bounds");
+    }
+
+    if (buckets[hashKey] != undefined) {
+      if (buckets[hashKey].key === key) {
+        console.group(buckets[hashKey]);
+        buckets[hashKey].value = value;
+      } else {
+        const newList = linkedList();
+        newList.append(buckets[hashKey]);
+        newList.append(pair);
+
+        buckets[hashKey] = newList;
+
+        console.log(hashKey);
+        console.log(newList.at(0));
+        console.log(newList.at(1));
+      }
+    } else {
+      buckets[hashKey] = pair;
+
+      return pair;
+    }
+  }
+
+
+  function get(key) {
+    let foundValue = null;
+
+    buckets.forEach((bucket) => {
+      if (typeof (bucket === "object")) {
+        if (bucket.hashKey === undefined) {
+          let n = bucket.size() - 1;
+          for (let i = 0; i < n; i++) {
+            const bucketObject = bucket.at(i);
+            // console.log(bucketObject)
+            bucketObject.key === key ? (foundValue = bucketObject.value) : null;
+          }
+        }
+        if (bucket.key === key) {
+          foundValue = bucket.value;
+        }
+      }
+    });
+
+    return foundValue;
+  }
+
+
+  function remove(key) {
+    let removedItem = false;
+      let matchIndex =false
+    buckets.forEach((bucket) => {
+      if (typeof (bucket === "object")) {
+
+      if (bucket.hashKey === undefined) {
+          let n = bucket.size() - 1;
+          
+          for (let i = 0; i < n; i++) {
+            const bucketObject = bucket.at(i);
+            // console.log(`bucket object`)
+            // console.log(bucketObject)
+            if(bucketObject.key === key){
+              console.log('They Match')
+              matchIndex = i
+
+          }
+
+        }
+       
+          bucket.remove(matchIndex)
+          
+          removedItem = true
+
+         
+        
+        
+      }
       
-     }
-   if(bucket.key === key){   
-      foundValue = bucket.value
-    } 
 
+      if (bucket.key === key) {
+        buckets.splice(bucket.hashKey, bucket.hashKey + 1);
+        removedItem = true;
+      }
+    }
+    });
+
+    return removedItem;
   }
 
-})
+  function length() {
+    let l=0
+    buckets.forEach(bucket => bucket)
+  }
 
-return foundValue
 
+  return { hash, set, buckets, get, remove };
 }
- 
-
-
-
-
-
-
-
-
-
-
- return {hash, set, buckets, get}
- }
- 
- 
- 
- 
- 
-
-
-
-
-
-
 
 const linkedList = () => {
   let n = 0;
@@ -125,11 +143,9 @@ const linkedList = () => {
     return current;
   };
 
-
   const prepend = (value) => {
     insertAt(value, 0);
   };
-
 
   const insertAt = (value, index) => {
     const newNode = node(value);
@@ -148,18 +164,15 @@ const linkedList = () => {
       current = current.next;
       current.index++;
     }
-    n++
+    n++;
   };
 
-
-  const size = () => n+1;
-
+  const size = () => n + 1;
 
   const head = () => {
     const headNode = preNode.next;
     return headNode.value;
   };
-
 
   const tail = () => {
     const current = iterate();
@@ -169,7 +182,6 @@ const linkedList = () => {
     }
   };
 
-  
   const at = (index) => {
     let current = preNode;
     while (current.next) {
@@ -181,35 +193,28 @@ const linkedList = () => {
     }
   };
 
-
-  const pop = () =>{
-    remove(n)
-  }
-
+  const pop = () => {
+    remove(n);
+  };
 
   const remove = (index) => {
-    if(index<0 ||index >n) return null
+    if (index < 0 || index > n) return null;
     let leftNode = at(index - 1);
     let rightNode = at(index + 1);
-    if (index != n && index !=0) {
-      
+    if (index != n && index != 0) {
       console.log(`index: ${index}`);
       leftNode.next = rightNode;
-      
-    } else if(index===0){
-      preNode.next = rightNode
-    }
-    else if(index===n) {
+    } else if (index === 0) {
+      preNode.next = rightNode;
+    } else if (index === n) {
       leftNode.next = null;
-     
     }
     let current = rightNode;
-      while (current) {
-        current.index = current.index - 1;
-        current = current.next;
-      
+    while (current) {
+      current.index = current.index - 1;
+      current = current.next;
     }
-    n--
+    n--;
   };
 
   const contains = (value) => {
@@ -248,7 +253,7 @@ const linkedList = () => {
       }
       current = current.next;
     }
-    console.log(n)
+    console.log(n);
     return stringChain;
   };
 
@@ -272,19 +277,7 @@ const node = (value = null, next = null) => {
   return { value, next };
 };
 
-
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- const test = hashMap()
+const test = hashMap();
 
 //  test.hash("Allyn"));
 //  test.hash("Smith"));
@@ -292,31 +285,37 @@ const node = (value = null, next = null) => {
 // // console.log(test.hash("Braithwaite"));
 //  test.hash("Williams"));
 
- test.set('apple', 'red')
-test.set('banana', 'yellow')
-test.set('carrot', 'orange')
-test.set('dog', 'brown')
-   
- test.set('elephant', 'gray')
- test.set('frog', 'green')
- test.set('grape', 'purple')
- test.set('hat', 'black')
- test.set('ice cream', 'white')
- test.set('jacket', 'blue')
- test.set('kite', 'pink')
- test.set('lion', 'golden')
+test.set("apple", "red");
+test.set("banana", "yellow");
+test.set("carrot", "orange");
+test.set("dog", "brown");
+
+test.set("elephant", "gray");
+test.set("frog", "green");
+test.set("grape", "purple");
+test.set("hat", "black");
+test.set("ice cream", "white");
+test.set("jacket", "blue");
+test.set("kite", "pink");
+test.set("lion", "golden");
 //  test.set('elephant', 'huge')
 
 //  console.log('----------BUCKETS----------------')
 //  console.log(test.buckets)
 
- console.log('------------KEYS---------------')
- console.log(`------------APPLE------------`)
- console.log(test.get('apple'))
- console.log(`-------------HAT-----------`)
- console.log(test.get('hat'))
- console.log(`-----------NOT IN LIST------------`)
- console.log(test.get("turnip"))
-//  console.log(test.buckets[11])
+console.log(`------------APPLE------------`);
+console.log(test.get("apple"));
+console.log(`-------------HAT-----------`);
+console.log(test.get("hat"));
+console.log(`-----------NOT IN LIST------------`);
+console.log(test.get("random"));
+console.log(test.remove("kite"));
+console.log(`Remove dog`)
+console.log(test.remove("dog"))
+console.log(`get dog`)
+console.log(test.get("dog"))
+console.log(`remove lion`);
+console.log(test.remove('lion'))
+console.log(test.buckets);
 
-
+// console.log(test.remove("kite"));

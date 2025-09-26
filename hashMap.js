@@ -49,28 +49,31 @@ function set(key,value) {
 
 function get(key) {
   let foundValue = null
-
+  
   buckets.forEach(bucket =>{
-    if(typeof(bucket) === 'object'&& bucket != null){
+    
+    if(typeof(bucket === 'object')){
+    
+     if(bucket.hashKey===undefined){
+       let n= bucket.size()-1
+     for(let i =0; i<n; i++){
+      const bucketObject = bucket.at(i)
+    bucketObject.key === key ? foundValue = bucketObject.value  : null
+     }
+    
+    
+      
+     }
    if(bucket.key === key){   
       foundValue = bucket.value
-   }
-  // } else if(bucket === undefined){
-    console.log(`Empty bucket?`)
-    console.log(typeof(bucket))
-    // console.log(bucket)
-    // console.log(bucket.find(key))
-    // console.log(bucket.toString())
-  } else if(bucket === null ){
-    console.log(`Empty bucket`)
+    } 
+
   }
-  // console.log(`----------`)
-  // console.log(bucket.hashKey)
-  // console.log(typeof(bucket))
-  // console.log(bucket)
-  // console.log(`_____________`)
+
 })
+
 return foundValue
+
 }
  
 
@@ -308,8 +311,12 @@ test.set('dog', 'brown')
 //  console.log(test.buckets)
 
  console.log('------------KEYS---------------')
+ console.log(`------------APPLE------------`)
  console.log(test.get('apple'))
+ console.log(`-------------HAT-----------`)
  console.log(test.get('hat'))
- console.log(test.buckets)
+ console.log(`-----------NOT IN LIST------------`)
+ console.log(test.get("turnip"))
+//  console.log(test.buckets[11])
 
 

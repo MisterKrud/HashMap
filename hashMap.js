@@ -1,6 +1,6 @@
-  function hashMap(loadFactor, capacity) {
+  function hashMap(loadFactor, capacity=16) {
   let buckets = [];
-  buckets.length = 16;
+
   let l=0
 
   function hash(key) {
@@ -8,7 +8,7 @@
 
     const primeNumber = 31;
     for (let i = 0; i < key.length; i++) {
-      hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % 16;
+      hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % capacity;
     }
 
     return hashCode;
@@ -18,13 +18,12 @@
   function set(key, value) {
     const hashKey = hash(key);
     const pair = { key, value, hashKey };
-    if (hashKey < 0 || hashKey >= buckets.length) {
+    if (hashKey < 0 || hashKey >= capacity) {
       throw new Error("Trying to access index out of bounds");
     }
 
     if (buckets[hashKey] != undefined) {
       if (buckets[hashKey].key === key) {
-        console.group(buckets[hashKey]);
         buckets[hashKey].value = value;
       } else {
         const newList = linkedList();
@@ -32,17 +31,15 @@
         newList.append(pair);
 
         buckets[hashKey] = newList;
-
-        console.log(hashKey);
-        console.log(newList.at(0));
-        console.log(newList.at(1));
       }
       l++
+
     } else {
       buckets[hashKey] = pair;
       l++
       return pair;
     }
+    checkLoadFactor();
   }
 
 
@@ -50,19 +47,19 @@
     let foundValue = null;
 
     buckets.forEach((bucket) => {
-      // if (typeof (bucket === "object")) {
+     
         if (bucket.hashKey === undefined) {
           let n = bucket.size() - 1;
           for (let i = 0; i < n; i++) {
             const bucketObject = bucket.at(i);
-            // console.log(bucketObject)
+        
             bucketObject.key === key ? (foundValue = bucketObject.value) : null;
           }
         }
         if (bucket.key === key) {
           foundValue = bucket.value;
         }
-      // }
+
     });
 
     return foundValue;
@@ -124,7 +121,6 @@ l--
 
   const clear = () => {
   buckets.splice(0)
-  l=0
   }
 
   const keys = () => {
@@ -141,6 +137,8 @@ l--
         }
         if(bucket.key != undefined){
         keysArray.push(bucket.key)
+        } else if(bucket.key === undefined){
+          return
         }
         })  
         return keysArray
@@ -180,8 +178,48 @@ l--
     return entriesArray
   }
 
+  const checkLoadFactor = () =>{
+    const mapLength = length()
+    if(mapLength >loadFactor*capacity){
+      console.log(`CAPACITY REACHED`)
+      capacity = capacity*2
+    
 
-  return { hash, set, buckets, get, remove, length, clear, keys, values, entries};
+    const entriesArray = entries();
+    console.log(entriesArray)
+    clear()
+    entriesArray.forEach(entry =>{
+      set(entry[0], entry[1])
+      console.log(entry[0], entry[1])
+    })
+    }
+    console.log(`Load factor: ${loadFactor}`)
+    console.log(`Array load: ${mapLength/capacity}`)
+    return (mapLength >loadFactor*capacity)
+  }
+
+  const logMap = () => {
+    const mapArray = []
+    buckets.forEach(bucket => {
+      if(bucket.hashKey === undefined){
+        const linkedList = []
+        const n = bucket.size() -1
+        for (i=0; i<n ; i++){
+          
+          linkedList.push(bucket.at(i))
+         
+        }
+       mapArray.push(linkedList)
+      } else {
+        mapArray.push(bucket)
+      }
+
+    })
+    return mapArray
+  }
+
+
+  return { hash, set, buckets, get, remove, length, clear, keys, values, entries, checkLoadFactor, logMap};
 }
 
 const linkedList = () => {
@@ -343,7 +381,7 @@ const node = (value = null, next = null) => {
   return { value, next };
 };
 
-const test = hashMap();
+const test = hashMap(.75);
 
 
 
@@ -360,8 +398,25 @@ test.set("ice cream", "white");
 test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
-
 console.log(`Length: ${test.length()}`)
+console.log(test.checkLoadFactor())
+
+
+test.set("carrot", "orange");
+console.log(`Length: ${test.length()}`)
+ test.set('moon', 'silver')
+ console.log(`Length: ${test.length()}`)
+ console.log(test.checkLoadFactor())
+
+
+//  test.set("apple", "red");
+// test.set("banana", "yellow");
+// test.set("carrot", "orange");
+// test.set("dog", "brown");
+
+// console.log(`Length: ${test.length()}`)
+// console.log(test.checkLoadFactor())
+
 console.log('----------keys then values----------------')
 console.log(test.keys());
 console.log(test.values());
@@ -369,27 +424,30 @@ console.log(test.values());
 console.log('----------ENTRIES----------------')
 console.log(test.entries());
 
+console.log(`----------------------LOGMAP------------------`)
+console.log(test.logMap())
 
-console.log(`Get apple: ${test.get("apple")}`);
 
-console.log(`get hat: ${test.get("hat")}`);
+// console.log(`Get apple: ${test.get("apple")}`);
 
-console.log(`get 'random (not in list) ${test.get("random")}`);
-console.log(`removing 'kite: ${test.remove("kite")}`);
+// console.log(`get hat: ${test.get("hat")}`);
 
-console.log(`Removing dog: ${test.remove("dog")}`)
+// console.log(`get 'random (not in list) ${test.get("random")}`);
+// console.log(`removing 'kite: ${test.remove("kite")}`);
 
-console.log(`Get dog: ${test.get("dog")}`)
+// console.log(`Removing dog: ${test.remove("dog")}`)
 
-console.log(`Removing Lion: ${test.remove('lion')}`)
-console.log('----------keys then values----------------')
-console.log(test.keys());
-console.log(test.values());
-console.log(`Length: ${test.length()}`)
+// console.log(`Get dog: ${test.get("dog")}`)
 
-console.log(`Clearing: ${test.clear()}`)
-console.log('----------BUCKETS----------------')
-console.log(`buckets: ${test.buckets}`);
-console.log(`Length: ${test.length()}`)
+// console.log(`Removing Lion: ${test.remove('lion')}`)
+// console.log('----------keys then values----------------')
+// console.log(test.keys());
+// console.log(test.values());
+// console.log(`Length: ${test.length()}`)
+
+// console.log(`Clearing: ${test.clear()}`)
+// console.log('----------BUCKETS----------------')
+// console.log(`buckets: ${test.buckets}`);
+// console.log(`Length: ${test.length()}`)
 
 // console.log(test.remove("kite"));

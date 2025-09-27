@@ -17,7 +17,7 @@
 
   function set(key, value) {
     const hashKey = hash(key);
-    const pair = { key, value };
+    const pair = { key, value, hashKey };
     if (hashKey < 0 || hashKey >= capacity) {
       throw new Error("Trying to access index out of bounds");
     }
@@ -26,68 +26,29 @@ const currentBucket = buckets[hashKey]
       if (buckets[hashKey].key === key) {
         buckets[hashKey].value = value;
       }else{
-        // console.log(`currentBucket: ${currentBucket}`)
+      
        try {
-        let bucketKey = key
-        let bucketValue = value
         for(let i = 0; i < currentBucket.size()-1; i++){
-          console.log(currentBucket.size())
+         
          
          let bucketItem = currentBucket.at(i)
-         console.log(`item in linkedList ${i}`)
-          console.log(bucketItem)
+        
          if(bucketItem.key === key){
-          console.log(true)
+         
           bucketItem.value = value
-          console.log(bucketItem)
+        
          }
         
         }
-        // console.log(currentBucket.size())
-        //  const index = currentBucket.find(`key: '${key}', value: '${value}'`)
-        //  console.log(`Index; ${index}`)
-        //  console.log(currentBucket.at(index))
-        // console.log('Found the dog')
-        // console.log(currentBucket.at(0))
-
-        // const bucket0 = currentBucket.at(0)
-        // console.log(`${bucket0.key}, ${bucket0.value}`)
-        //  console.log(currentBucket.at(1))
-        //   console.log(currentBucket.at(2))
-
-
-
-        // if(buckets[hashKey].size() >= 0) {
-        //   buckets[hashKey].remove(index)
-        //   console.log(`before....`)
-        //   console.log(buckets[hashKey].at(index))
-        //  buckets[hashKey].insertAt(pair,index)
-        //  console.log(`after...`)
-        //  console.log(buckets[hashKey].at(index))
-        // } else {
-        //   console.log(`Linked list for ${key}, ${value} is < 0`)
-        // const newList = linkedList();
-        // newList.append(buckets[hashKey]);
-        // newList.append(pair);
-
-        // buckets[hashKey] = newList;
-        // }
-         
-
+        
        } catch {
-        console.log(`No linkedList found for ${key}, ${value} starting new one`)
+        // console.log(`No linkedList found for ${key}, ${value} starting new one`)
         
         const newList = linkedList();
         newList.append(buckets[hashKey]);
         newList.append(pair);
 
         buckets[hashKey] = newList;}
-
-
-
-
-
-
 
       }
       l++
@@ -251,9 +212,9 @@ l--
       // console.log(entry[0], entry[1])
     })
     }
-    // console.log(`Load factor: ${loadFactor}`)
-    // console.log(`Array load: ${mapLength/capacity}`)
-    // return (mapLength >loadFactor*capacity)
+    console.log(`Load factor: ${loadFactor}`)
+    console.log(`Array load: ${mapLength/capacity}`)
+    return (mapLength >loadFactor*capacity)
   }
 
   const logMap = () => {
@@ -470,11 +431,26 @@ test.set("carrot", "orange");
  test.set("apple", "red");
 test.set("banana", "yellow");
 test.set("carrot", "orange");
-console.log(`@@@@@@@@@@@@SECOND DOG@@@@@@@@@@@@@@@@`)
+
 test.set("dog", "brownish");
 
+
+
+test.set("car","dark-grey")
+test.set("jumper", "cream")
+test.set("sunset", "magenta")
+test.set("tie", "teal");
+test.set("shoes", "watermelon");
+test.set("mandarin", "blood orange")
+test.set("morning", "cyan");
+test.set("pride", "rainbow");
+test.set("third", "bronze");
+test.set("field", "verdant");
+test.set("desert","sand");
+test.set("water", "aquamarine");
+
 // console.log(`Length: ${test.length()}`)
-// console.log(test.checkLoadFactor())
+console.log(test.checkLoadFactor())
 
 // console.log('----------keys then values----------------')
 // console.log(test.keys());

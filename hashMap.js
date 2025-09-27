@@ -95,7 +95,7 @@ const currentBucket = buckets[hashKey]
     
 
       if (bucket.hashKey === undefined) {
-        console.log(`HASHKEY UNDEFINED`)
+      
        
           let n = bucket.size() - 1;
            
@@ -113,7 +113,7 @@ const currentBucket = buckets[hashKey]
           removedItem = true   
         }  
       } else if (bucket.key === key) {
-        console.log(`KEY FOUND FOR REMOVAL`)
+     
 
         const idx = buckets.findIndex(value => {
          
@@ -122,10 +122,10 @@ const currentBucket = buckets[hashKey]
               return value.key
             }
           }})
-       console.log(`BEFORE SPLICE`)
+       
        console.log(logMap())
         buckets.splice(idx,1);
-          console.log(`AFTER SPLICE`);
+        
 console.log(logMap())
         removedItem = true;
        
@@ -514,18 +514,20 @@ console.log(`bucketslength: ${test.length()}`)
 
 console.log(test.checkLoadFactor())
 
-// console.log(`Removing Lion: ${test.remove('lion')}`)
-// console.log('----------keys then values----------------')
-// console.log(test.keys());
-// console.log(test.values());
-// console.log(`Length: ${test.length()}`)
+console.log(`Removing Lion: ${test.remove('lion')}`)
+console.log('----------keys then values----------------')
+console.log(test.keys());
+console.log(test.values());
+console.log(`Length: ${test.length()}`)
 
-// console.log(`Clearing: ${test.clear()}`)
-// console.log('----------BUCKETS----------------')
-// console.log(`buckets: ${test.buckets}`);
-// console.log(`Length: ${test.length()}`)
-
-// console.log(test.remove("kite"));
+console.log(`Clearing: ${test.clear()}`)
+console.log('----------BUCKETS----------------')
+console.log(`buckets: ${test.buckets}`);
+console.log(`Length: ${test.length()}`)
+console.log('----------keys then values----------------')
+console.log(test.keys());
+console.log(test.values());
+console.log(test.logMap())
 
 
 

@@ -17,20 +17,78 @@
 
   function set(key, value) {
     const hashKey = hash(key);
-    const pair = { key, value, hashKey };
+    const pair = { key, value };
     if (hashKey < 0 || hashKey >= capacity) {
       throw new Error("Trying to access index out of bounds");
     }
-
+const currentBucket = buckets[hashKey]
     if (buckets[hashKey] != undefined) {
       if (buckets[hashKey].key === key) {
         buckets[hashKey].value = value;
-      } else {
+      }else{
+        // console.log(`currentBucket: ${currentBucket}`)
+       try {
+        let bucketKey = key
+        let bucketValue = value
+        for(let i = 0; i < currentBucket.size()-1; i++){
+          console.log(currentBucket.size())
+         
+         let bucketItem = currentBucket.at(i)
+         console.log(`item in linkedList ${i}`)
+          console.log(bucketItem)
+         if(bucketItem.key === key){
+          console.log(true)
+          bucketItem.value = value
+          console.log(bucketItem)
+         }
+        
+        }
+        // console.log(currentBucket.size())
+        //  const index = currentBucket.find(`key: '${key}', value: '${value}'`)
+        //  console.log(`Index; ${index}`)
+        //  console.log(currentBucket.at(index))
+        // console.log('Found the dog')
+        // console.log(currentBucket.at(0))
+
+        // const bucket0 = currentBucket.at(0)
+        // console.log(`${bucket0.key}, ${bucket0.value}`)
+        //  console.log(currentBucket.at(1))
+        //   console.log(currentBucket.at(2))
+
+
+
+        // if(buckets[hashKey].size() >= 0) {
+        //   buckets[hashKey].remove(index)
+        //   console.log(`before....`)
+        //   console.log(buckets[hashKey].at(index))
+        //  buckets[hashKey].insertAt(pair,index)
+        //  console.log(`after...`)
+        //  console.log(buckets[hashKey].at(index))
+        // } else {
+        //   console.log(`Linked list for ${key}, ${value} is < 0`)
+        // const newList = linkedList();
+        // newList.append(buckets[hashKey]);
+        // newList.append(pair);
+
+        // buckets[hashKey] = newList;
+        // }
+         
+
+       } catch {
+        console.log(`No linkedList found for ${key}, ${value} starting new one`)
+        
         const newList = linkedList();
         newList.append(buckets[hashKey]);
         newList.append(pair);
 
-        buckets[hashKey] = newList;
+        buckets[hashKey] = newList;}
+
+
+
+
+
+
+
       }
       l++
 
@@ -103,7 +161,7 @@ l--
    let keysLength =[]
     buckets.forEach((bucket) => {
     
-        if (bucket.hashKey === undefined) {
+        if (bucket.key === undefined) {
           let n = bucket.size() - 1;
           for (let i = 0; i < n; i++) {
             const bucketObject = bucket.at(i);
@@ -127,7 +185,7 @@ l--
     const keysArray = []
     buckets.forEach((bucket) => {
     
-        if (bucket.hashKey === undefined) {
+        if (bucket.key === undefined) {
           let n = bucket.size() - 1;
           for (let i = 0; i < n; i++) {
             const bucketObject = bucket.at(i);
@@ -148,7 +206,7 @@ l--
     const valuesArray = []
     buckets.forEach((bucket) => {
     
-        if (bucket.hashKey === undefined) {
+        if (bucket.key === undefined) {
           let n = bucket.size() - 1;
           for (let i = 0; i < n; i++) {
             const bucketObject = bucket.at(i);
@@ -190,18 +248,18 @@ l--
     clear()
     entriesArray.forEach(entry =>{
       set(entry[0], entry[1])
-      console.log(entry[0], entry[1])
+      // console.log(entry[0], entry[1])
     })
     }
-    console.log(`Load factor: ${loadFactor}`)
-    console.log(`Array load: ${mapLength/capacity}`)
-    return (mapLength >loadFactor*capacity)
+    // console.log(`Load factor: ${loadFactor}`)
+    // console.log(`Array load: ${mapLength/capacity}`)
+    // return (mapLength >loadFactor*capacity)
   }
 
   const logMap = () => {
     const mapArray = []
     buckets.forEach(bucket => {
-      if(bucket.hashKey === undefined){
+      if(bucket.key === undefined){
         const linkedList = []
         const n = bucket.size() -1
         for (i=0; i<n ; i++){
@@ -398,31 +456,32 @@ test.set("ice cream", "white");
 test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
-console.log(`Length: ${test.length()}`)
-console.log(test.checkLoadFactor())
+// console.log(`Length: ${test.length()}`)
+// console.log(test.checkLoadFactor())
 
 
 test.set("carrot", "orange");
-console.log(`Length: ${test.length()}`)
+// console.log(`Length: ${test.length()}`)
  test.set('moon', 'silver')
- console.log(`Length: ${test.length()}`)
- console.log(test.checkLoadFactor())
+//  console.log(`Length: ${test.length()}`)
+//  console.log(test.checkLoadFactor())
 
 
-//  test.set("apple", "red");
-// test.set("banana", "yellow");
-// test.set("carrot", "orange");
-// test.set("dog", "brown");
+ test.set("apple", "red");
+test.set("banana", "yellow");
+test.set("carrot", "orange");
+console.log(`@@@@@@@@@@@@SECOND DOG@@@@@@@@@@@@@@@@`)
+test.set("dog", "brownish");
 
 // console.log(`Length: ${test.length()}`)
 // console.log(test.checkLoadFactor())
 
-console.log('----------keys then values----------------')
-console.log(test.keys());
-console.log(test.values());
+// console.log('----------keys then values----------------')
+// console.log(test.keys());
+// console.log(test.values());
 
-console.log('----------ENTRIES----------------')
-console.log(test.entries());
+// console.log('----------ENTRIES----------------')
+// console.log(test.entries());
 
 console.log(`----------------------LOGMAP------------------`)
 console.log(test.logMap())
@@ -451,3 +510,7 @@ console.log(test.logMap())
 // console.log(`Length: ${test.length()}`)
 
 // console.log(test.remove("kite"));
+
+
+
+//CHECK LINKED LIST FOR DOUBLING
